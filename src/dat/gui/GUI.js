@@ -20,6 +20,7 @@ import FunctionController from '../controllers/FunctionController';
 import NumberControllerBox from '../controllers/NumberControllerBox';
 import NumberControllerSlider from '../controllers/NumberControllerSlider';
 import ColorController from '../controllers/ColorController';
+import FileController from '../controllers/FileController';
 import requestAnimationFrame from '../utils/requestAnimationFrame';
 import CenteredDiv from '../dom/CenteredDiv';
 import dom from '../dom/dom';
@@ -493,8 +494,9 @@ common.extend(
 
     /**
      * Adds a new {@link Controller} to the GUI. The type of controller created
-     * is inferred from the initial value of <code>object[property]</code>. For
-     * color properties, see {@link addColor}.
+     * is inferred from the initial value of <code>object[property]</code>.
+     * For color properties, see {@link addColor}.
+     * For file properties, see {@link addFile}.
      *
      * @param {Object} object The object to be manipulated
      * @param {String} property The name of the property to be manipulated
@@ -552,6 +554,33 @@ common.extend(
         property,
         {
           color: true
+        }
+      );
+    },
+
+    /**
+     * Adds a new file controller to the GUI.
+     *
+     * @param object
+     * @param property
+     * @returns {Controller} The controller that was added to the GUI.
+     * @instance
+     *
+     * @example
+     * var instance = {
+     *  onLoad: function(dataURL) {
+     *    document.getElementById('img').src = dataURL
+     *  }
+     * };
+     * gui.addFile(instance, 'onLoad');
+     */
+    addFile: function(object, property) {
+      return add(
+        this,
+        object,
+        property,
+        {
+          file: true
         }
       );
     },
@@ -994,10 +1023,10 @@ function augmentController(gui, li, controller) {
     const box = new NumberControllerBox(controller.object, controller.property,
       { min: controller.__min, max: controller.__max, step: controller.__step });
 
-    common.each(['updateDisplay', 'onChange', 'onFinishChange', 'step', 'min', 'max'], function(method) {
+    common.each(['updateDisplay', 'onChange', 'onFinishChange', 'step', 'min', 'max'], function (method) {
       const pc = controller[method];
       const pb = box[method];
-      controller[method] = box[method] = function() {
+      controller[method] = box[method] = function () {
         const args = Array.prototype.slice.call(arguments);
         pb.apply(box, args);
         return pc.apply(controller, args);
@@ -1007,7 +1036,7 @@ function augmentController(gui, li, controller) {
     dom.addClass(li, 'has-slider');
     controller.domElement.insertBefore(box.domElement, controller.domElement.firstElementChild);
   } else if (controller instanceof NumberControllerBox) {
-    const r = function(returned) {
+    const r = function (returned) {
       // Have we defined both boundaries?
       if (common.isNumber(controller.__min) && common.isNumber(controller.__max)) {
         // Well, then lets just replace this with a slider.
@@ -1065,6 +1094,8 @@ function augmentController(gui, li, controller) {
     }, controller.updateDisplay);
 
     controller.updateDisplay();
+  } else if (controller instanceof FileController) {
+    dom.addClass(li, 'file');
   }
 
   controller.setValue = common.compose(function(val) {
@@ -1139,6 +1170,8 @@ function add(gui, object, property, params) {
 
   if (params.color) {
     controller = new ColorController(object, property);
+  } else if (params.file) {
+    controller = new FileController(object, property);
   } else {
     const factoryArgs = [object, property].concat(params.factoryArgs);
     controller = ControllerFactory.apply(gui, factoryArgs);
@@ -1165,6 +1198,8 @@ function add(gui, object, property, params) {
   dom.addClass(li, GUI.CLASS_CONTROLLER_ROW);
   if (controller instanceof ColorController) {
     dom.addClass(li, 'color');
+  } else if (controller instanceof FileController) {
+    dom.addClass(li, 'file');
   } else {
     dom.addClass(li, typeof controller.getValue());
   }
