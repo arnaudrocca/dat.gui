@@ -11,7 +11,6 @@
  * http://www.apache.org/licenses/LICENSE-2.0
  */
 
-import css from '../utils/css';
 import saveDialogueContents from './saveDialogue.html';
 import ControllerFactory from '../controllers/ControllerFactory';
 import Controller from '../controllers/Controller';
@@ -25,10 +24,6 @@ import requestAnimationFrame from '../utils/requestAnimationFrame';
 import CenteredDiv from '../dom/CenteredDiv';
 import dom from '../dom/dom';
 import common from '../utils/common';
-
-import styleSheet from './style.scss'; // CSS to embed in build
-
-css.inject(styleSheet);
 
 /** @ignore Outer-most className for GUI's */
 const CSS_NAMESPACE = 'dg';
@@ -1023,10 +1018,10 @@ function augmentController(gui, li, controller) {
     const box = new NumberControllerBox(controller.object, controller.property,
       { min: controller.__min, max: controller.__max, step: controller.__step });
 
-    common.each(['updateDisplay', 'onChange', 'onFinishChange', 'step', 'min', 'max'], function (method) {
+    common.each(['updateDisplay', 'onChange', 'onFinishChange', 'step', 'min', 'max'], function(method) {
       const pc = controller[method];
       const pb = box[method];
-      controller[method] = box[method] = function () {
+      controller[method] = box[method] = function() {
         const args = Array.prototype.slice.call(arguments);
         pb.apply(box, args);
         return pc.apply(controller, args);
@@ -1036,7 +1031,7 @@ function augmentController(gui, li, controller) {
     dom.addClass(li, 'has-slider');
     controller.domElement.insertBefore(box.domElement, controller.domElement.firstElementChild);
   } else if (controller instanceof NumberControllerBox) {
-    const r = function (returned) {
+    const r = function(returned) {
       // Have we defined both boundaries?
       if (common.isNumber(controller.__min) && common.isNumber(controller.__max)) {
         // Well, then lets just replace this with a slider.

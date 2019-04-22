@@ -44,7 +44,7 @@ class FunctionController extends Controller {
 
   fire() {
     if (this.__onChange) {
-      this.__onChange.call(this);
+      this.__onChange.call(this, this.getValue());
     }
     this.getValue().call(this.object);
     if (this.__onFinishChange) {
