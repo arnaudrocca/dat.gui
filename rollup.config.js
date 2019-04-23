@@ -42,7 +42,7 @@ export default {
   plugins: [
     resolve(),
     sass({
-      insert: false,
+      insert: true,
       output: 'build/dat.gui.css',
       options: {outputStyle: 'compressed'}
     }),
