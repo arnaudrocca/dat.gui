@@ -34,21 +34,21 @@ $button-height: 20px;
 
     @include transition(opacity, 0.1s, linear);
 
-    &.taller-than-window {
-      overflow-x: hidden;
-      overflow-y: auto;
+    // &.taller-than-window {
+    //   overflow-x: hidden;
+    //   overflow-y: auto;
 
-      .close-button {
+    //   .close-button {
 
-        opacity: 1;
+    //     opacity: 1;
 
-        /* TODO, these are style notes */
-        margin-top: -1px;
-        border-top: 1px solid $border-color;
+    //     /* TODO, these are style notes */
+    //     margin-top: -1px;
+    //     border-top: 1px solid $border-color;
 
-      }
+    //   }
 
-    }
+    // }
 
     ul.closed .close-button {
       opacity: 1 !important;
