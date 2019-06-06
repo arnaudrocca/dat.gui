@@ -59,22 +59,20 @@ $input-color: darken($background-color, 8.5%);
   /** Auto place */
   &.main {
 
-    ul {
-      /** Scrollbar */
-      &::-webkit-scrollbar {
-        width: 5px;
-        background: $background-color;
-      }
-      &::-webkit-scrollbar-corner {
-        height: 0;
-        display: none;
-      }
-      &::-webkit-scrollbar-thumb {
-        border-radius: 5px;
-        background: darken($background-color, 30%);
-      }
-
+    /** Scrollbar */
+    &::-webkit-scrollbar {
+      width: 5px;
+      background: $background-color;
     }
+    &::-webkit-scrollbar-corner {
+      height: 0;
+      display: none;
+    }
+    &::-webkit-scrollbar-thumb {
+      border-radius: 5px;
+      background: darken($background-color, 30%);
+    }
+
   }
 
   li {
